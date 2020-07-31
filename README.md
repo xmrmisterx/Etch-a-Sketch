@@ -95,14 +95,21 @@ function clearGrid () { // Function will clear the grid, by removing all the chi
 makeGrid(16); // We need to call the function to make the initial grid of 16 by 16 squares.
 
 // Why does referencing the script file not work, but putting the script within the html file work? We think it has something to do with the referencing of the container element; so can we create the container element using only javascript? It seems there has to be something already there to append it to?
+
 // Wow, we fixed it, apparently the call document.queryselector for container was wrong, and it was document.getElementByID , but I know we had tried this before and we didn't get our grids, said our "container was null", so the only difference is, we moved the js script reference to body vs head, and we used getElementByID instead of querySelector, let's change those 2 factors and see if we can get our error message again
+
 // Ok, after the moving the JS script reference test, we've found the problem. Putting it in the head was the problem, and obviously before when we were setting const container by queryselector was also wrong, it's getElementByID, so that's good to know, mainly JS script in the body, which we did some googling and it gives the html time to load, so script.js can reference it, which kinda makes sense
+
 // Let's play around with the css styling parameters...
 
 // We need to set up a hovering effect, which happens when the mouse enters a div, and and ends when the mouse leaves the div, so it's suggested we use event listeners for both events as a starting point
+
 // Ok so we gave most of our divs in the grid a classname of cell, and those are the ones referenced in our css. In the previous DOM lesson, we learned we can querySelectAll to find all of a certain node (I guess this means any element?) so presumably we select for all 'cell', set it as a const, then we are able to use the forEach method to iterate through each node, with the aim of adding an event listener to each node
+
 // It seems we already have a similar array called cells that we set as a variable up top, however, it doesn't seem like we can call the 'forEach' method for it, so let's try creating another const for the cells
+
 // We used the method in the DOM lesson to queryselectall, then add eventlistener, but it's not working, maybe we can't add 2 listeners at once?
+
 // We found a hover method on w3schools website, let's try that; yeah we can't seem to find a way to do it in javascript itself
 
 // We went back to trying the javascript to change css methods, and none worked lol. it doesn't seem we can call '.style' from our cells array, or for each individual cell div...
@@ -124,11 +131,17 @@ makeGrid(16); // We need to call the function to make the initial grid of 16 by 
 // In an etch-a-sketch we want the color to stay, so I think 'mouseover' event is fine. It also seems like all squares are getting filled in, which means we don't have to set up eventlisteners for 'gridrow' class
 
 // Let's try changing the class, does this also change the background color? Cool, adding a new class to those, and setting the background color property for that class in the CSS also works.
+
 // How do we delete a grid? Ok, so after trying alot of stuff, we realized that const cells set to the class 'cell' we cannot enumerate with foreach, so we change it to a existingpixels variable set to document.queryselectall('.cell'), then we were able to enumerate throw them with a foreach method, but when we tried to remove them from container with container.removechild(cell), we got an error saying cell wasn't a child of container. that's when we realized the direct child of container is gridrow, so when we changed the child to the gridrow class, it finally worked and we were able to reset the grid
 
 // The assignment says to have the new grid pop up using the name number of pixels as the initial 16 by 16, how do we do that? Ok, let's just assume our page is 1000 by 1000 pixels, how do we adjust the width and height to match that? Say we wanted everything at 20 px, errr just the width and height at 20 px, so 16*20=320, that gives us 320, but we want to stretch to 1000, ok this is simple algebra, 16x=1000, so x is 62.5, which means width and height of 62.5, so the formula for the width or height, assuming we have 1000 pixels, is 1000/(number of grid squares)
+
 // We still can't get dynamically sized squares based on how many squares we set, ugh. What if we change the container size, will that change the div siz? It won't unless the div size is dynamic? Setting the container to 1000px width and height does seem to cap the squares at about half the page. Now here's a thought, if we can edit the min width, why not max width? Maybe we need to set the max width out a bit?
+
 // Alright, we've made a discovery. By setting the container width and height at a certain value, say 1000 px each, we've set the upper limit for how many pixels can be used, we're able to manipulate the size of the square divs that generate inside the container. Using this logic, we've found that setting the min width, min height, and padding-bottom equal to (100/numberOfSquares) gives us our % for those values, e.g. at 10 squares, 100/10 is 10, so min-width, min-height, and padding-bottom are all 10%. Note that we have a margin and border set up (to 1px each currently), which actually means the minwidth, minheight, and padding-bottom is actually set to 'calc(10% - 4px)'. Honestly we're not sure why it's 4px instead of a 2px offset, but 4px gives us the correct results.
+
 // Ok, so we managed to adjust our css to match what we want our grids to do and look like (mostly a breakthrough of limiting the container size, and adding a padding-bottom into css, otherwise squares were just lines), now how do we set the css properties, which are strings, into our javascript that employs formulas based on numbers and variables?
+
 // We need to figure out how to convert our equation for width, height, and padding into string form for css.style, currently it says NaN: this is now resolved, our equation was fine, however, we didn't use the correct variable for number of squares, we used 'squaresperside', which is a variable that we set up, but the value isn't defined, at least not yet in the makerow and makecolumn functions, luckily, in the make column function, 'numberofcolumns' is the same value, so when we replaced that 'squaresPerSide' with 'numberOfColumns', our equation to get the correct css style values worked; we tested it from a range of 1 squarePerSide to 100, so it seems to work well
+
 // We decide not to do the optional part of this assignment, as we've spent alot of time already on this, and eyah we learned alot, but we've seen the other Etch-a-Sketch githubs and we feel we can do the optional stuff if we wanted to
